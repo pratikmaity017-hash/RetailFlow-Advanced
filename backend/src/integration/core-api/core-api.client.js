@@ -10,23 +10,15 @@ export class CoreApiError extends Error {
   }
 }
 
-export async function requestCoreApi(
+async function sendCoreApiRequest(
   path,
-  { token, method = "GET", body, timeoutMs = 5000 } = {},
+  { method = "GET", body, timeoutMs = 10000, headers = {} } = {},
 ) {
   if (!env.coreApiBaseUrl) {
     throw new CoreApiError(
       "Core API is not configured.",
       503,
       "CORE_API_NOT_CONFIGURED",
-    );
-  }
-
-  if (!token) {
-    throw new CoreApiError(
-      "Authentication token is required.",
-      401,
-      "AUTH_TOKEN_REQUIRED",
     );
   }
 
@@ -38,7 +30,7 @@ export async function requestCoreApi(
       method,
       headers: {
         Accept: "application/json",
-        Authorization: `Bearer ${token}`,
+        ...headers,
         ...(body ? { "Content-Type": "application/json" } : {}),
       },
       ...(body ? { body: JSON.stringify(body) } : {}),
@@ -63,4 +55,48 @@ export async function requestCoreApi(
       isTimeout ? "CORE_API_TIMEOUT" : "CORE_API_UNAVAILABLE",
     );
   }
+}
+
+export async function requestCoreApi(
+  path,
+  { token, method = "GET", body, timeoutMs = 5000 } = {},
+) {
+  if (!token) {
+    throw new CoreApiError(
+      "Authentication token is required.",
+      401,
+      "AUTH_TOKEN_REQUIRED",
+    );
+  }
+
+  return sendCoreApiRequest(path, {
+    method,
+    body,
+    timeoutMs,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
+
+export async function requestCoreServiceApi(
+  path,
+  { method = "GET", body, timeoutMs = 10000 } = {},
+) {
+  if (!env.coreApiServiceKey) {
+    throw new CoreApiError(
+      "Core service authentication is not configured.",
+      503,
+      "CORE_API_SERVICE_AUTH_NOT_CONFIGURED",
+    );
+  }
+
+  return sendCoreApiRequest(path, {
+    method,
+    body,
+    timeoutMs,
+    headers: {
+      "X-Service-Key": env.coreApiServiceKey,
+    },
+  });
 }

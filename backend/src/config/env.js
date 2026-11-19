@@ -2,7 +2,6 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-// Validate application-level configuration.
 const port = Number(process.env.PORT || 5000);
 
 if (!Number.isInteger(port) || port < 1 || port > 65535) {
@@ -15,20 +14,21 @@ if (!["development", "production", "test"].includes(nodeEnv)) {
   throw new Error("NODE_ENV must be development, production, or test.");
 }
 
-// External dependencies are allowed to be unavailable.
-// Their status will be handled by the application.
 const mongodbUri = process.env.MONGODB_URI?.trim() || null;
 const coreApiBaseUrl = process.env.CORE_API_BASE_URL?.trim() || null;
+const coreApiServiceKey = process.env.CORE_API_SERVICE_KEY?.trim() || null;
 
 export const env = Object.freeze({
   nodeEnv,
   port,
   mongodbUri,
   coreApiBaseUrl,
+  coreApiServiceKey,
 
   dependencies: Object.freeze({
     mongodbConfigured: Boolean(mongodbUri),
     coreApiConfigured: Boolean(coreApiBaseUrl),
+    coreApiServiceConfigured: Boolean(coreApiServiceKey),
   }),
 });
 

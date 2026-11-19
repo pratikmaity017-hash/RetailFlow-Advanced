@@ -1,7 +1,10 @@
 import { CoreApiError } from "../../../integration/core-api/core-api.client.js";
-import { getAnalyticsOverview } from "../services/analytics.service.js";
 
-const ALLOWED_QUERY_PARAMETERS = new Set(["from", "to", "groupBy"]);
+import { getAnalyticsOverview } from "../services/analytics.service.js";
+import { getProfitAnalysis } from "../services/profit-analysis.service.js";
+
+const ALLOWED_OVERVIEW_PARAMETERS = new Set(["from", "to", "groupBy"]);
+const ALLOWED_PROFIT_PARAMETERS = new Set(["from", "to"]);
 
 const ALLOWED_GROUPS = new Set(["day", "week", "month"]);
 
@@ -17,9 +20,9 @@ function isValidDate(value) {
   );
 }
 
-function validateQueryParameters(query) {
+function validateQueryParameters(query, allowedParameters) {
   const unknownParameters = Object.keys(query).filter(
-    (key) => !ALLOWED_QUERY_PARAMETERS.has(key),
+    (key) => !allowedParameters.has(key),
   );
 
   if (unknownParameters.length > 0) {
@@ -64,7 +67,7 @@ function validateDateRange(from, to) {
 
 export async function getAnalyticsOverviewController(req, res, next) {
   try {
-    validateQueryParameters(req.query);
+    validateQueryParameters(req.query, ALLOWED_OVERVIEW_PARAMETERS);
 
     const { from, to, groupBy = "day" } = req.query;
 
@@ -79,7 +82,6 @@ export async function getAnalyticsOverviewController(req, res, next) {
     }
 
     const data = await getAnalyticsOverview({
-      // Use only the organization verified by Core.
       organizationId: req.organization.id,
       accessToken: req.coreAccessToken,
       from,
@@ -90,6 +92,30 @@ export async function getAnalyticsOverviewController(req, res, next) {
     res.status(200).json({
       success: true,
       message: "Advanced analytics overview retrieved successfully.",
+      data,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function getProfitAnalysisController(req, res, next) {
+  try {
+    validateQueryParameters(req.query, ALLOWED_PROFIT_PARAMETERS);
+
+    const { from, to } = req.query;
+
+    validateDateRange(from, to);
+
+    const data = await getProfitAnalysis({
+      organizationId: req.organization.id,
+      from,
+      to,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Profit analysis retrieved successfully.",
       data,
     });
   } catch (error) {
