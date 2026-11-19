@@ -45,6 +45,7 @@ export async function authenticateOrganization(req, res, next) {
       userId: context.user.id,
       sessionId: context.user.sessionId,
     };
+    req.coreAccessToken = accessToken;
     req.organization = context.organization;
     req.membership = context.membership;
 
