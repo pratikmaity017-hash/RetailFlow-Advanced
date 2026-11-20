@@ -17,8 +17,13 @@ import "./Header.css";
 export default function Header({ onMenuClick }) {
   const { theme, toggleTheme } = useTheme();
 
-  const { organizations, selectedOrganization, selectOrganization } =
-    useOrganization();
+  const {
+    organizations,
+    selectedOrganization,
+    selectOrganization,
+    isLoading: organizationsLoading,
+    error: organizationError,
+  } = useOrganization();
 
   const [organizationMenuOpen, setOrganizationMenuOpen] = useState(false);
 
@@ -80,15 +85,21 @@ export default function Header({ onMenuClick }) {
             type="button"
             aria-haspopup="menu"
             aria-expanded={organizationMenuOpen}
+            disabled={organizationsLoading || !selectedOrganization}
             onClick={() => setOrganizationMenuOpen((current) => !current)}
           >
             <div className="organization-avatar">
-              {selectedOrganization.name.charAt(0)}
+              {selectedOrganization?.name?.charAt(0) || <Building2 size={17} />}
             </div>
 
             <div className="organization-details">
-              <strong>{selectedOrganization.name}</strong>
-              <span>{selectedOrganization.type}</span>
+              <strong>
+                {organizationsLoading
+                  ? "Loading organizations..."
+                  : selectedOrganization?.name || "No organization"}
+              </strong>
+
+              <span>{selectedOrganization?.type || "Workspace"}</span>
             </div>
 
             <ChevronDown
@@ -99,7 +110,7 @@ export default function Header({ onMenuClick }) {
             />
           </button>
 
-          {organizationMenuOpen && (
+          {organizationMenuOpen && selectedOrganization && (
             <div className="organization-menu" role="menu">
               <div className="organization-menu-heading">
                 <span>SWITCH ORGANIZATION</span>
@@ -140,11 +151,11 @@ export default function Header({ onMenuClick }) {
                   );
                 })}
               </div>
-
-              <div className="organization-menu-footer">
-                Demo selector · Core API integration pending
-              </div>
             </div>
+          )}
+
+          {organizationError && (
+            <div className="organization-error">{organizationError}</div>
           )}
         </div>
       </div>

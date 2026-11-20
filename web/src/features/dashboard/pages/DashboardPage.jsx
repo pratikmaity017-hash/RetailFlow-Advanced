@@ -118,7 +118,13 @@ function MetricCard({ metric }) {
 }
 
 export default function DashboardPage() {
-  const { selectedOrganization, isDemo } = useOrganization();
+  const {
+    selectedOrganization,
+    isDemo,
+    integrationStatus,
+    integrationContext,
+    integrationError,
+  } = useOrganization();
   return (
     <div className="page-layout">
       <div className="page-heading">
@@ -126,8 +132,11 @@ export default function DashboardPage() {
           <span className="eyebrow">BUSINESS OVERVIEW</span>
           <h1>Dashboard</h1>
           <p>
-            Viewing {selectedOrganization.name} ·{" "}
-            {isDemo ? "Demonstration data" : "Organization data"}
+            {selectedOrganization
+              ? `Viewing ${selectedOrganization.name} · ${
+                  isDemo ? "Demonstration data" : "Organization data"
+                }`
+              : "No organization selected"}
           </p>
         </div>
 
@@ -138,6 +147,54 @@ export default function DashboardPage() {
       </div>
 
       <BackendStatus />
+
+      <section
+        className="panel"
+        style={{
+          padding: "16px 20px",
+          marginBottom: "20px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: "12px",
+          flexWrap: "wrap",
+        }}
+      >
+        <div>
+          <strong>Organization Integration</strong>
+          <p style={{ fontSize: "13px", marginTop: "5px" }}>
+            {integrationStatus === "checking" &&
+              "Verifying organization access..."}
+            {integrationStatus === "verified" &&
+              "Organization access verified successfully."}
+            {integrationStatus === "error" && integrationError}
+            {integrationStatus === "idle" &&
+              "No organization verification active."}
+          </p>
+        </div>
+
+        <div>
+          {integrationStatus === "verified" && (
+            <span style={{ color: "#16a34a", fontWeight: 600 }}>
+              Verified · {integrationContext?.membership?.role}
+            </span>
+          )}
+
+          {integrationStatus === "checking" && (
+            <span style={{ color: "#d97706", fontWeight: 600 }}>Checking</span>
+          )}
+
+          {integrationStatus === "error" && (
+            <span style={{ color: "#dc2626", fontWeight: 600 }}>
+              Verification failed
+            </span>
+          )}
+
+          {integrationStatus === "idle" && (
+            <span style={{ opacity: 0.7 }}>Inactive</span>
+          )}
+        </div>
+      </section>
 
       <section className="metrics-grid">
         {metrics.map((metric) => (
