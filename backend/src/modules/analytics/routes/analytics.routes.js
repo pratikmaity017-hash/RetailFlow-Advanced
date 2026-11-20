@@ -1,4 +1,4 @@
-import { Router } from "express";
+﻿import { Router } from "express";
 
 import { authenticateOrganization } from "../../../core/middleware/authenticate-organization.middleware.js";
 import { authorizeOrganization } from "../../../core/middleware/authorize-organization.middleware.js";
@@ -9,9 +9,11 @@ import {
   getProfitAnalysisController,
 } from "../controllers/analytics.controller.js";
 
+import { getExecutiveOverviewController } from "../controllers/executive-overview.controller.js";
+
 const router = Router({ mergeParams: true });
 
-// Analytics Overview
+// Existing Analytics Overview
 router.get(
   "/overview",
   authenticateOrganization,
@@ -19,13 +21,22 @@ router.get(
   getAnalyticsOverviewController,
 );
 
-// Profit Analysis
+// Existing Profit Analysis
 router.get(
   "/profit",
   authenticateOrganization,
   authorizeOrganization("owner", "manager"),
   requireAdvancedFeature("advanced_analytics"),
   getProfitAnalysisController,
+);
+
+// Executive Overview
+router.get(
+  "/executive-overview",
+  authenticateOrganization,
+  authorizeOrganization("owner", "manager"),
+  requireAdvancedFeature("advanced_analytics"),
+  getExecutiveOverviewController,
 );
 
 export default router;
