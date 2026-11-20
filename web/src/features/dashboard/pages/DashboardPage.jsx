@@ -10,6 +10,10 @@ import {
   RotateCcw,
 } from "lucide-react";
 
+import { useOrganization } from "../../organization/organizationContext";
+import "./DashboardPage.css";
+import "../../../shared/styles/page.css";
+
 const metrics = [
   {
     title: "Total Revenue",
@@ -113,13 +117,17 @@ function MetricCard({ metric }) {
 }
 
 export default function DashboardPage() {
+  const { selectedOrganization, isDemo } = useOrganization();
   return (
-    <div className="dashboard-page">
+    <div className="page-layout">
       <div className="page-heading">
         <div>
           <span className="eyebrow">BUSINESS OVERVIEW</span>
           <h1>Dashboard</h1>
-          <p>Monitor your advanced retail operations in one place.</p>
+          <p>
+            Viewing {selectedOrganization.name} ·{" "}
+            {isDemo ? "Demonstration data" : "Organization data"}
+          </p>
         </div>
 
         <button className="date-filter">

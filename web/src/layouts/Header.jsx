@@ -10,36 +10,20 @@ import {
   Building2,
 } from "lucide-react";
 
-import { useTheme } from "../ThemeContext";
-
-const demoOrganizations = [
-  {
-    id: "retailflow-demo",
-    name: "RetailFlow Demo",
-    type: "Demo organization",
-  },
-  {
-    id: "northstar-retail",
-    name: "Northstar Retail",
-    type: "Demo organization",
-  },
-  {
-    id: "citymart-demo",
-    name: "CityMart Demo",
-    type: "Demo organization",
-  },
-];
+import { useTheme } from "../app/ThemeContext";
+import { useOrganization } from "../features/organization/organizationContext";
+import "./Header.css";
 
 export default function Header({ onMenuClick }) {
   const { theme, toggleTheme } = useTheme();
 
-  const [selectedOrganization, setSelectedOrganization] = useState(
-    demoOrganizations[0],
-  );
+  const { organizations, selectedOrganization, selectOrganization } =
+    useOrganization();
+
   const [organizationMenuOpen, setOrganizationMenuOpen] = useState(false);
 
-  function handleOrganizationSelect(organization) {
-    setSelectedOrganization(organization);
+  function handleOrganizationSelect(organizationId) {
+    selectOrganization(organizationId);
     setOrganizationMenuOpen(false);
   }
 
@@ -50,6 +34,7 @@ export default function Header({ onMenuClick }) {
           className="icon-button menu-button"
           onClick={onMenuClick}
           aria-label="Open navigation"
+          type="button"
         >
           <Menu size={21} />
         </button>
@@ -65,7 +50,7 @@ export default function Header({ onMenuClick }) {
         <button className="search-button" type="button">
           <Search size={17} />
           <span>Search anything...</span>
-          <kbd>⌘ K</kbd>
+          <kbd>Ctrl K</kbd>
         </button>
 
         <button
@@ -122,7 +107,7 @@ export default function Header({ onMenuClick }) {
               </div>
 
               <div className="organization-options">
-                {demoOrganizations.map((organization) => {
+                {organizations.map((organization) => {
                   const isSelected =
                     selectedOrganization.id === organization.id;
 
@@ -134,7 +119,7 @@ export default function Header({ onMenuClick }) {
                       }`}
                       type="button"
                       role="menuitem"
-                      onClick={() => handleOrganizationSelect(organization)}
+                      onClick={() => handleOrganizationSelect(organization.id)}
                     >
                       <span className="organization-option-icon">
                         <Building2 size={17} />

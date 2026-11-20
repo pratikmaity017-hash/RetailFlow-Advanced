@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { X, Store } from "lucide-react";
-import { navigationItems } from "../../app/navigation";
+import { navigationItems } from "../app/navigation";
+import "./Sidebar.css";
 
 export default function Sidebar({ open, onClose }) {
   return (

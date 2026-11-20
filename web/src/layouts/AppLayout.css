@@ -1,0 +1,39 @@
+/* Application layout */
+
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+.main-area {
+  min-width: 0;
+  flex: 1;
+  margin-left: 258px;
+}
+
+.main-content {
+  width: 100%;
+  max-width: 1800px;
+  margin: 0 auto;
+  padding: 32px 36px 40px;
+}
+
+/* Responsive layout */
+
+@media (max-width: 760px) {
+  .main-area {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .main-content {
+    padding: 24px 18px 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-content {
+    padding: 22px 13px 25px;
+  }
+}

@@ -1,0 +1,136 @@
+.rf-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.rf-button:focus-visible {
+  outline: 3px solid var(--primary-soft);
+  outline-offset: 2px;
+}
+
+.rf-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Sizes */
+
+.rf-button--sm {
+  min-height: 32px;
+  padding: 6px 11px;
+  font-size: 12px;
+}
+
+.rf-button--md {
+  min-height: 38px;
+  padding: 9px 15px;
+  font-size: 13px;
+}
+
+.rf-button--lg {
+  min-height: 44px;
+  padding: 11px 19px;
+  font-size: 14px;
+}
+
+/* Variants */
+
+.rf-button--primary {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+.rf-button--primary:hover:not(:disabled) {
+  filter: brightness(0.92);
+}
+
+.rf-button--secondary {
+  background: var(--surface-secondary);
+  color: var(--text-primary);
+  border-color: var(--border);
+}
+
+.rf-button--secondary:hover:not(:disabled) {
+  background: var(--surface-hover);
+}
+
+.rf-button--outline {
+  background: transparent;
+  color: var(--text-primary);
+  border-color: var(--border);
+}
+
+.rf-button--outline:hover:not(:disabled) {
+  background: var(--surface-hover);
+}
+
+.rf-button--ghost {
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+.rf-button--ghost:hover:not(:disabled) {
+  background: var(--surface-hover);
+  color: var(--text-primary);
+}
+
+.rf-button--danger {
+  background: var(--danger);
+  color: #ffffff;
+}
+
+.rf-button--danger:hover:not(:disabled) {
+  filter: brightness(0.92);
+}
+
+/* Layout */
+
+.rf-button--full-width {
+  width: 100%;
+}
+
+.rf-button__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Loading spinner */
+
+.rf-button__spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: rf-button-spin 0.7s linear infinite;
+}
+
+@keyframes rf-button-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rf-button {
+    transition: none;
+  }
+
+  .rf-button__spinner {
+    animation-duration: 1.5s;
+  }
+}

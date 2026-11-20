@@ -1,5 +1,7 @@
 import { useLocation } from "react-router-dom";
-import { navigationItems } from "../../app/navigation";
+import { navigationItems } from "../../../app/navigation";
+import "./FeaturePlaceholderPage.css";
+import "../../../shared/styles/page.css";
 
 export default function FeaturePlaceholderPage() {
   const location = useLocation();
@@ -11,7 +13,7 @@ export default function FeaturePlaceholderPage() {
   const title = currentFeature?.label || "Advanced Feature";
 
   return (
-    <div className="dashboard-page">
+    <div className="page-layout">
       <div className="page-heading">
         <div>
           <span className="eyebrow">ADVANCED MODULE</span>
