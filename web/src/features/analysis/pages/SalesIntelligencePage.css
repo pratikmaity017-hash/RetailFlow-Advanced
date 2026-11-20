@@ -1,0 +1,610 @@
+.si-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+  color: var(--text-primary);
+}
+
+/* Header */
+
+.si-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.si-heading-content {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.si-heading-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.si-heading-content h1 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 750;
+  letter-spacing: -0.7px;
+  color: var(--text-primary);
+}
+
+.si-heading-content p {
+  margin: 5px 0 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.si-refresh-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 15px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.si-refresh-button:hover {
+  background: var(--surface-hover);
+  border-color: var(--primary);
+}
+
+.si-refresh-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.si-spinning {
+  animation: si-spin 1s linear infinite;
+}
+
+@keyframes si-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Filters */
+
+.si-filter-panel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 18px 20px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+}
+
+.si-filter-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--text-primary);
+}
+
+.si-filter-title svg {
+  color: var(--primary);
+}
+
+.si-filter-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 12px;
+}
+
+.si-filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.si-filter-field label {
+  font-size: 11px;
+  font-weight: 650;
+  color: var(--text-secondary);
+}
+
+.si-filter-field input,
+.si-filter-field select {
+  min-height: 38px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface-secondary);
+  color: var(--text-primary);
+  font-size: 12px;
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.si-filter-field input:focus,
+.si-filter-field select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 18%, transparent);
+}
+
+.si-filter-field input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+}
+
+/* Metrics */
+
+.si-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.si-metric-card {
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.si-metric-card:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--primary) 35%, var(--border));
+  box-shadow: var(--shadow-md);
+}
+
+.si-metric-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.si-metric-label {
+  font-size: 12px;
+  font-weight: 650;
+  color: var(--text-secondary);
+}
+
+.si-metric-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 35px;
+  flex-shrink: 0;
+  border-radius: 11px;
+  color: var(--primary);
+  background: var(--primary-soft);
+}
+
+.si-metric-value {
+  margin-top: 18px;
+  font-size: clamp(20px, 2vw, 26px);
+  font-weight: 750;
+  letter-spacing: -0.7px;
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+.si-metric-description {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* Chart panels */
+
+.si-panel {
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.si-trend-panel {
+  padding: 22px;
+}
+
+.si-panel-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+.si-panel-header h2 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 720;
+  letter-spacing: -0.3px;
+  color: var(--text-primary);
+}
+
+.si-panel-header p {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.si-chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.si-chart-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.si-legend-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.si-legend-net {
+  background: #8178f5;
+}
+
+.si-legend-gross {
+  background: #14b8a6;
+}
+
+.si-chart-container {
+  width: 100%;
+  height: 340px;
+  margin-top: 24px;
+  min-width: 0;
+}
+
+.si-chart-tooltip {
+  min-width: 180px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-md);
+}
+
+.si-tooltip-label {
+  margin-bottom: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.si-tooltip-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 7px;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.si-tooltip-row strong {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--text-primary);
+}
+
+.si-tooltip-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.si-chart-grid {
+  stroke: var(--border);
+}
+
+/* Recharts theme adjustments */
+
+.si-chart-container .recharts-cartesian-axis-tick-value {
+  fill: var(--text-secondary);
+}
+
+.si-chart-container .recharts-cartesian-axis-line {
+  stroke: var(--border);
+}
+
+.si-chart-container .recharts-tooltip-cursor {
+  stroke: var(--text-muted);
+}
+
+.si-chart-container .recharts-reference-line line {
+  stroke: var(--border);
+}
+
+/* Empty / Error / Loading */
+
+.si-empty-chart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 250px;
+  padding: 30px 20px;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.si-empty-chart svg {
+  color: var(--primary);
+  margin-bottom: 14px;
+}
+
+.si-empty-chart h3 {
+  margin: 0;
+  font-size: 15px;
+  color: var(--text-primary);
+}
+
+.si-empty-chart p {
+  max-width: 360px;
+  margin: 8px 0 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.si-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  gap: 14px;
+  color: var(--text-secondary);
+}
+
+.si-loading p {
+  font-size: 13px;
+}
+
+.si-loading-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--primary-soft);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: si-spin 0.8s linear infinite;
+}
+
+.si-error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 18px;
+  border: 1px solid color-mix(in srgb, var(--danger) 30%, var(--border));
+  border-radius: 12px;
+  background: var(--danger-soft);
+  color: var(--text-primary);
+}
+
+.si-error strong {
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.si-error p {
+  margin: 5px 0 0;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.si-error button {
+  padding: 8px 12px;
+  border: 1px solid color-mix(in srgb, var(--danger) 35%, var(--border));
+  border-radius: 9px;
+  background: var(--surface);
+  color: var(--text-primary);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.si-error button:hover {
+  background: var(--surface-hover);
+}
+
+.si-refreshing-indicator {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Responsive */
+
+@media (max-width: 1200px) {
+  .si-metrics-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 850px) {
+  .si-filter-panel {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .si-filter-controls {
+    width: 100%;
+  }
+
+  .si-filter-field {
+    flex: 1;
+    min-width: 150px;
+  }
+
+  .si-filter-field input,
+  .si-filter-field select {
+    width: 100%;
+  }
+
+  .si-chart-container {
+    height: 300px;
+  }
+}
+
+@media (max-width: 600px) {
+  .si-page {
+    gap: 18px;
+  }
+
+  .si-page-header {
+    align-items: flex-start;
+  }
+
+  .si-heading-content {
+    gap: 10px;
+  }
+
+  .si-heading-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+  }
+
+  .si-heading-content h1 {
+    font-size: 21px;
+  }
+
+  .si-heading-content p {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .si-refresh-button {
+    padding: 9px 11px;
+  }
+
+  .si-metrics-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .si-metric-card {
+    padding: 15px;
+    border-radius: 14px;
+  }
+
+  .si-metric-value {
+    font-size: 20px;
+    margin-top: 14px;
+  }
+
+  .si-metric-label {
+    font-size: 11px;
+  }
+
+  .si-metric-description {
+    font-size: 10px;
+  }
+
+  .si-filter-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .si-filter-field {
+    width: 100%;
+  }
+
+  .si-trend-panel {
+    padding: 16px;
+  }
+
+  .si-panel-header {
+    flex-direction: column;
+  }
+
+  .si-chart-legend {
+    gap: 12px;
+  }
+
+  .si-chart-container {
+    height: 260px;
+    margin-top: 18px;
+  }
+}
+
+@media (max-width: 380px) {
+  .si-metrics-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Dark theme refinements */
+
+:root[data-theme="dark"]
+  .si-chart-container
+  .recharts-cartesian-axis-tick-value {
+  fill: var(--text-secondary);
+}
+
+:root[data-theme="dark"] .si-chart-container .recharts-cartesian-axis-line,
+:root[data-theme="dark"] .si-chart-grid {
+  stroke: var(--border);
+}
+
+:root[data-theme="dark"] .si-filter-field input,
+:root[data-theme="dark"] .si-filter-field select {
+  background: var(--surface-secondary);
+  color: var(--text-primary);
+  border-color: var(--border);
+}
+
+:root[data-theme="dark"] .si-filter-field select option {
+  background: var(--surface);
+  color: var(--text-primary);
+}
+
+:root[data-theme="dark"] .si-chart-tooltip {
+  background: var(--surface);
+  border-color: var(--border);
+}
+
+:root[data-theme="dark"] .si-metric-card:hover {
+  box-shadow: var(--shadow-md);
+}

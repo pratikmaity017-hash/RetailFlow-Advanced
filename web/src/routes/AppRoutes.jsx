@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 
 import AppLayout from "../layouts/AppLayout";
 import DashboardPage from "../features/dashboard/pages/DashboardPage";
+import SalesIntelligencePage from "../features/analysis/pages/SalesIntelligencePage";
 import FeaturePlaceholderPage from "../features/common/pages/FeaturePlaceholderPage";
 import ProtectedRoute from "../features/auth/components/ProtectedRoute";
 
@@ -12,7 +13,7 @@ export default function AppRoutes() {
         <Route path="/advanced" element={<AppLayout />}>
           <Route index element={<DashboardPage />} />
 
-          <Route path="analysis" element={<FeaturePlaceholderPage />} />
+          <Route path="analysis" element={<SalesIntelligencePage />} />
           <Route path="warehouses" element={<FeaturePlaceholderPage />} />
           <Route path="transfers" element={<FeaturePlaceholderPage />} />
           <Route path="returns" element={<FeaturePlaceholderPage />} />
