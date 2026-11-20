@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 
 import { useOrganization } from "../../organization/organizationContext";
+import BackendStatus from "../components/BackendStatus";
 import "./DashboardPage.css";
 import "../../../shared/styles/page.css";
 
@@ -135,6 +136,8 @@ export default function DashboardPage() {
           Last 7 days
         </button>
       </div>
+
+      <BackendStatus />
 
       <section className="metrics-grid">
         {metrics.map((metric) => (
