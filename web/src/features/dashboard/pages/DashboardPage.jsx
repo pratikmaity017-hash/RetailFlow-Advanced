@@ -10,6 +10,8 @@ import {
   RotateCcw,
   IndianRupee,
   BarChart3,
+  CreditCard,
+  Package,
 } from "lucide-react";
 
 import { AuthContext } from "../../auth/AuthContext";
@@ -60,22 +62,39 @@ function formatNumber(value) {
   }).format(value);
 }
 
-function formatComparison(comparison) {
+function formatComparison(comparison, comparisonType = "previous_period") {
   if (!comparison || comparison.direction === "indeterminate") {
     return "No comparable baseline";
   }
 
   if (comparison.percentageChange === null) {
-    return comparison.direction === "unchanged"
-      ? "No change"
-      : "Previous period was zero";
+    if (comparison.direction === "unchanged") {
+      return "No change";
+    }
+
+    const baselineLabel =
+      comparisonType === "previous_year" ? "Previous year" : "Previous period";
+
+    return `${baselineLabel} was zero`;
   }
 
   const sign = comparison.percentageChange > 0 ? "+" : "";
-  return `${sign}${comparison.percentageChange}% vs previous period`;
+  const comparisonLabel =
+    comparisonType === "previous_year"
+      ? "vs previous year"
+      : "vs previous period";
+
+  return `${sign}${comparison.percentageChange}% ${comparisonLabel}`;
 }
 
-function MetricCard({ title, value, description, comparison, icon: Icon }) {
+function MetricCard({
+  title,
+  value,
+  description,
+  comparison,
+  comparisonType,
+  icon: Icon,
+}) {
   const direction = comparison?.direction;
   const TrendIcon = direction === "decrease" ? TrendingDown : TrendingUp;
 
@@ -94,11 +113,11 @@ function MetricCard({ title, value, description, comparison, icon: Icon }) {
         {comparison && direction !== "indeterminate" ? (
           <span className="metric-comparison">
             <TrendIcon size={14} />
-            {formatComparison(comparison)}
+            {formatComparison(comparison, comparisonType)}
           </span>
         ) : (
           <span className="metric-comparison muted">
-            {formatComparison(comparison)}
+            {formatComparison(comparison, comparisonType)}
           </span>
         )}
         <span>{description}</span>
@@ -191,6 +210,106 @@ function TrendChart({ trends = [], loading }) {
   );
 }
 
+function formatPaymentMethod(method) {
+  if (typeof method !== "string" || !method.trim()) {
+    return "Other";
+  }
+
+  return method
+    .replace(/[_-]+/g, " ")
+    .replace(/\b\w/g, (character) => character.toUpperCase());
+}
+
+function PaymentMethodsPanel({ paymentMethods = [] }) {
+  return (
+    <article className="panel period-summary-panel">
+      <div className="panel-heading">
+        <div>
+          <h3>Payment Methods</h3>
+          <p>Collection breakdown by payment method</p>
+        </div>
+        <div className="panel-heading-icon">
+          <CreditCard size={18} />
+        </div>
+      </div>
+
+      {paymentMethods.length === 0 ? (
+        <div className="chart-state">
+          No payment method activity is available for this period.
+        </div>
+      ) : (
+        <div className="summary-list">
+          {paymentMethods.map((item, index) => (
+            <div key={`${item.method || "other"}-${index}`}>
+              <span>
+                {formatPaymentMethod(item.method)}
+                <small>
+                  {formatNumber(item.totalPayments)}{" "}
+                  {item.totalPayments === 1 ? "payment" : "payments"}
+                </small>
+              </span>
+              <strong>
+                {formatCurrency(
+                  typeof item.amountPaise === "number"
+                    ? item.amountPaise / 100
+                    : null,
+                )}
+              </strong>
+            </div>
+          ))}
+        </div>
+      )}
+    </article>
+  );
+}
+
+function TopProductsPanel({ products = [] }) {
+  return (
+    <article className="panel period-summary-panel">
+      <div className="panel-heading">
+        <div>
+          <h3>Top Products</h3>
+          <p>Best-selling products by net quantity sold</p>
+        </div>
+        <div className="panel-heading-icon">
+          <Package size={18} />
+        </div>
+      </div>
+
+      {products.length === 0 ? (
+        <div className="chart-state">
+          No product sales are available for this period.
+        </div>
+      ) : (
+        <div className="summary-list">
+          {products.map((item, index) => (
+            <div
+              key={`${item.productId || item.sku || item.productName}-${index}`}
+            >
+              <span>
+                {item.productName || "Unnamed product"}
+                <small>
+                  {item.sku ? `SKU: ${item.sku} · ` : ""}
+                  {formatNumber(item.quantitySold)} sold
+                  {typeof item.returnedQuantity === "number" &&
+                    ` · ${formatNumber(item.returnedQuantity)} returned`}
+                </small>
+              </span>
+              <strong>
+                {formatCurrency(
+                  typeof item.netSalesPaise === "number"
+                    ? item.netSalesPaise / 100
+                    : null,
+                )}
+              </strong>
+            </div>
+          ))}
+        </div>
+      )}
+    </article>
+  );
+}
+
 export default function DashboardPage() {
   const { accessToken, isLoading: authLoading } = useContext(AuthContext);
   const {
@@ -278,6 +397,8 @@ export default function DashboardPage() {
   const metrics = report?.current?.metrics;
   const summary = report?.current?.summary;
   const trends = report?.current?.trends ?? [];
+  const paymentMethods = report?.current?.paymentMethods ?? [];
+  const topProducts = report?.current?.topProducts ?? [];
 
   const metricCards = [
     {
@@ -286,6 +407,7 @@ export default function DashboardPage() {
       description: "Gross sales less reported returns",
       comparison: metrics?.sales?.netSales?.comparison,
       icon: IndianRupee,
+      comparisonType: report?.filters?.compare,
     },
     {
       title: "Gross Sales",
@@ -293,6 +415,7 @@ export default function DashboardPage() {
       description: "Sales before return deductions",
       comparison: metrics?.sales?.grossSales?.comparison,
       icon: Wallet,
+      comparisonType: report?.filters?.compare,
     },
     {
       title: "Collected",
@@ -300,6 +423,7 @@ export default function DashboardPage() {
       description: "Payments collected in this period",
       comparison: metrics?.collections?.collected?.comparison,
       icon: Receipt,
+      comparisonType: report?.filters?.compare,
     },
     {
       title: "Outstanding",
@@ -307,6 +431,7 @@ export default function DashboardPage() {
       description: "Outstanding amount in the sales report",
       comparison: metrics?.collections?.outstanding?.comparison,
       icon: CircleAlert,
+      comparisonType: report?.filters?.compare,
     },
     {
       title: "Sales Count",
@@ -314,6 +439,7 @@ export default function DashboardPage() {
       description: "Completed sales",
       comparison: metrics?.sales?.salesCount?.comparison,
       icon: BarChart3,
+      comparisonType: report?.filters?.compare,
     },
     {
       title: "Total Returns",
@@ -321,6 +447,7 @@ export default function DashboardPage() {
       description: "Returns reported in this period",
       comparison: metrics?.returns?.totalReturns?.comparison,
       icon: RotateCcw,
+      comparisonType: report?.filters?.compare,
     },
   ];
 
@@ -580,6 +707,11 @@ export default function DashboardPage() {
                 not supplied by that report are not estimated here.
               </p>
             </article>
+          </section>
+
+          <section className="dashboard-content-grid">
+            <PaymentMethodsPanel paymentMethods={paymentMethods} />
+            <TopProductsPanel products={topProducts} />
           </section>
 
           <div className="report-meta">
